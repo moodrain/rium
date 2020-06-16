@@ -18,7 +18,7 @@ function $query(name, type = 'string') {
     let value = query(name)
     switch (type) {
         case 'integer':
-            // no break
+        // no break
         case 'int':
             let number = window.parseInt(value)
             return isNaN(number) ? '' : number
@@ -169,39 +169,12 @@ function $time(date) {
     return date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0') + ' ' + date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0') + ':' + date.getSeconds().toString().padStart(2, '0')
 }
 
-function $timeCn(date) {
-    let minute = 1000 * 60
-    let hour = minute * 60
-    let day = hour * 24
-    let month = day * 30
-    let now = new Date().getTime()
-    let diffValue = now - date
-    let monthC = diffValue / month
-    let weekC = diffValue / (7 * day)
-    let dayC = diffValue / day
-    let hourC = diffValue / hour
-    let minC = diffValue / minute
-    if (monthC >= 1) {
-        result = parseInt(monthC) + '个月前'
-    } else if (weekC >= 1) {
-        result = parseInt(weekC) + '周前'
-    } else if (dayC >= 1) {
-        result = parseInt(dayC) + '天前'
-    } else if (hourC >= 1) {
-        result = parseInt(hourC) + '小时前'
-    } else if (minC >= 1) {
-        result = parseInt(minC) + '分钟前'
-    } else {
-        result = '刚刚'
-    }
-    return result
-}
-
-function $enter(btn) {
-    document.onkeydown = event => {
-        if (event.keyCode === 13)
-            $e(btn).click()
-    }
+function $enter(action) {
+    document.addEventListener('keydown', e => {
+        if (e.code === 'Enter') {
+            action()
+        }
+    })
 }
 
 function $toTop(btn, elem) {
@@ -225,8 +198,8 @@ function $toTop(btn, elem) {
     btn.addEventListener('click', () => {
         timer = setInterval(() => {
             let osTop = elem.scrollTop
-            let ispeed = Math.floor(-osTop / 6)
-            elem.scrollTop = osTop + ispeed
+            let speed = Math.floor(-osTop / 6)
+            elem.scrollTop = osTop + speed
             isTop = true
             if (osTop === 0) {
                 clearInterval(timer)
@@ -245,7 +218,7 @@ function $pullToLoad(elem, callback, distance) {
         if (content.scrollHeight - content.clientHeight - content.scrollTop < (distance ? distance : 50) && status.load) {
             status.load = false
             status.page++
-                callback(status)
+            callback(status)
         }
     })
 }
