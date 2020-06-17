@@ -1,8 +1,8 @@
-function $e(id) {
+function $e (id) {
     return typeof id == 'string' ? document.querySelector('#' + id) : id
 }
 
-function $query(name, type = 'string') {
+function $query (name, type = 'string') {
     let query = name => {
         name = name.replace(/[\[\]]/g, '\\$&')
         let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
@@ -27,7 +27,7 @@ function $query(name, type = 'string') {
     }
 }
 
-function $to(url, query) {
+function $to (url, query) {
     if (typeof url !== 'string') {
         query = url
         url = window.location.origin + window.location.pathname
@@ -36,15 +36,18 @@ function $to(url, query) {
     let oldQueryStr = window.location.search.substr(1).split('&')
     oldQueryStr.forEach(e => {
         let [key, val] = e.split('=')
-        oldQuery[key] = val
+        if (key) {
+            oldQuery[key] = val
+        }
     })
+    query = $obj2Url(query)
     query = Object.assign(oldQuery, query)
     let queryArr = []
     let queryStr = '?'
     for (let key in query) {
         query[key] != null && query[key] !== '' && queryArr.push(key + '=' + query[key])
     }
-    if (queryArr) {
+    if (queryArr.length > 0) {
         queryStr += (queryArr.join('&'))
         window.location.href = url + queryStr
     } else {
@@ -52,7 +55,11 @@ function $to(url, query) {
     }
 }
 
-function $submit(url, data) {
+function $reset () {
+    window.location.href = window.location.origin + window.location.pathname
+}
+
+function $submit (url, data) {
     if (typeof url === 'object') {
         data = url
         url = window.location.href
@@ -73,7 +80,7 @@ function $submit(url, data) {
     form.submit()
 }
 
-function $obj2Url(obj) {
+function $obj2Url (obj) {
     let form = {}
     let helper = {
         run(obj) {
@@ -107,7 +114,7 @@ function $obj2Url(obj) {
     return form
 }
 
-function $fet(url, data, method = 'get') {
+function $fet (url, data, method = 'get') {
     method = method.toLowerCase()
     if (method === 'get' && data) {
         url += ('?' + new URLSearchParams($obj2Url(data)))
@@ -127,7 +134,7 @@ function $fet(url, data, method = 'get') {
     return fetch(url, option).then(r => r.json())
 }
 
-function $ck(name, value, second) {
+function $ck (name, value, second) {
     if (value !== undefined) {
         let expires = ''
         let date = new Date()
@@ -151,7 +158,7 @@ function $ck(name, value, second) {
     }
 }
 
-function $date(date) {
+function $date (date) {
     if (typeof date === 'number') {
         date = new Date(date)
     } else if (typeof date === 'string') {
@@ -160,7 +167,7 @@ function $date(date) {
     return date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0')
 }
 
-function $time(date) {
+function $time (date) {
     if (typeof date === 'number') {
         date = new Date(date)
     } else if (typeof date === 'string') {
@@ -169,7 +176,7 @@ function $time(date) {
     return date.getFullYear() + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0') + ' ' + date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0') + ':' + date.getSeconds().toString().padStart(2, '0')
 }
 
-function $enter(action) {
+function $enter (action) {
     document.addEventListener('keydown', e => {
         if (e.code === 'Enter') {
             action()
@@ -177,7 +184,7 @@ function $enter(action) {
     })
 }
 
-function $toTop(btn, elem) {
+function $toTop (btn, elem) {
     btn = $e(btn)
     elem = elem ? $e(elem) : document.documentElement
     let toListen = elem === document.documentElement ? window : elem
@@ -208,7 +215,7 @@ function $toTop(btn, elem) {
     })
 }
 
-function $pullToLoad(elem, callback, distance) {
+function $pullToLoad (elem, callback, distance) {
     let content = $e(elem)
     let status = {
         load: true,
@@ -221,4 +228,21 @@ function $pullToLoad(elem, callback, distance) {
             callback(status)
         }
     })
+}
+
+function $bindVue (vue) {
+    vue = vue.prototype
+    vue.$e = $e
+    vue.$query = $query
+    vue.$to = $to
+    vue.$reset = $reset
+    vue.$submit = $submit
+    vue.$obj2Url = $obj2Url
+    vue.$fet = $fet
+    vue.$ck = $ck
+    vue.$date = $date
+    vue.$time = $time
+    vue.$enter = $enter
+    vue.$toTop = $toTop
+    vue.$pullToLoad = $pullToLoad
 }
