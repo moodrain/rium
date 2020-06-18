@@ -18,7 +18,7 @@ function $query(name, type = 'string') {
     let value = query(name)
     switch (type) {
         case 'integer':
-        // no break
+            // no break
         case 'int':
             let number = window.parseInt(value)
             return isNaN(number) ? '' : number
@@ -27,21 +27,23 @@ function $query(name, type = 'string') {
     }
 }
 
-function $to(url, query) {
+function $to(url, query, reset = false) {
     if (typeof url !== 'string') {
         query = url
         url = window.location.origin + window.location.pathname
     }
-    let oldQuery = {}
-    let oldQueryStr = window.location.search.substr(1).split('&')
-    oldQueryStr.forEach(e => {
-        let [key, val] = e.split('=')
-        if (key) {
-            oldQuery[key] = val
-        }
-    })
     query = $obj2Url(query)
-    query = Object.assign(oldQuery, query)
+    if (!reset) {
+        let oldQuery = {}
+        let oldQueryStr = window.location.search.substr(1).split('&')
+        oldQueryStr.forEach(e => {
+            let [key, val] = e.split('=')
+            if (key) {
+                oldQuery[key] = val
+            }
+        })
+        query = Object.assign(oldQuery, query)
+    }
     let queryArr = []
     let queryStr = '?'
     for (let key in query) {
@@ -225,7 +227,7 @@ function $pullToLoad(elem, callback, distance) {
         if (content.scrollHeight - content.clientHeight - content.scrollTop < (distance ? distance : 50) && status.load) {
             status.load = false
             status.page++
-            callback(status)
+                callback(status)
         }
     })
 }
