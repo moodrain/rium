@@ -7,7 +7,7 @@ function $query(name, type = 'string') {
         name = name.replace(/[\[\]]/g, '\\$&')
         let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
         let results = regex.exec(window.location.href)
-        if (!results) {
+        if (! results) {
             return null
         }
         if (!results[2]) {
@@ -33,7 +33,7 @@ function $to(url, query, reset = false) {
         url = window.location.origin + window.location.pathname
     }
     query = $obj2Url(query)
-    if (!reset) {
+    if (! reset) {
         let oldQuery = {}
         let oldQueryStr = window.location.search.substr(1).split('&')
         oldQueryStr.forEach(e => {
@@ -122,7 +122,7 @@ function $fet(url, data, method = 'get') {
         url += ('?' + new URLSearchParams($obj2Url(data)))
     }
     let option = {
-        credentials: 'include',
+        credentials: 'same-origin',
         method,
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
