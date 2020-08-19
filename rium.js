@@ -61,7 +61,7 @@ function $reset() {
     window.location.href = window.location.origin + window.location.pathname
 }
 
-function $submit(url, data, file = false) {
+function $submit(url, data) {
     if (typeof url === 'object') {
         data = url
         url = window.location.href
@@ -70,16 +70,20 @@ function $submit(url, data, file = false) {
     form.style.display = 'none'
     form.action = url
     form.method = 'POST'
-    if (file) {
-        form.enctype = 'multipart/form-data'
-    }
     let formData = $obj2Url(data)
     for (let key in formData) {
         let val = formData[key]
-        let inp = document.createElement('textarea')
-        inp.name = key
-        inp.value = val
-        form.appendChild(inp)
+        let isFile = val instanceof Element && val.tagName == 'INPUT' && val.type == 'file'
+        if (isFile) {
+            form.enctype = 'multipart/form-data'
+            val.name = key
+            form.appendChild(val)
+        } else {
+            let inp = document.createElement(isFile ? 'input' : 'textarea')
+            inp.value = val
+            inp.name = key
+            form.appendChild(inp)
+        }
     }
     document.body.appendChild(form)
     form.submit()
@@ -91,7 +95,8 @@ function $obj2Url(obj) {
         run(obj) {
             for (let key in obj) {
                 let val = obj[key]
-                if (typeof val === 'object') {
+                let isFile = val instanceof Element && val.tagName == 'INPUT' && val.type == 'file'
+                if (typeof val === 'object' && !isFile) {
                     this.handle(val, [key])
                 } else {
                     form[key] = val
@@ -102,7 +107,8 @@ function $obj2Url(obj) {
             for (let key in obj) {
                 let htmlKey = ''
                 let val = obj[key]
-                if (typeof val === 'object') {
+                let isFile = val instanceof Element && val.tagName == 'INPUT' && val.type == 'file'
+                if (typeof val === 'object' && !isFile) {
                     let newPrefix = prefix.concat(key)
                     this.handle(val, newPrefix)
                 } else {
