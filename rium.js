@@ -61,7 +61,7 @@ function $reset() {
     window.location.href = window.location.origin + window.location.pathname
 }
 
-function $submit(url, data) {
+function $submit(url, data, file = false) {
     if (typeof url === 'object') {
         data = url
         url = window.location.href
@@ -70,6 +70,9 @@ function $submit(url, data) {
     form.style.display = 'none'
     form.action = url
     form.method = 'POST'
+    if (file) {
+        form.enctype = 'multipart/form-data'
+    }
     let formData = $obj2Url(data)
     for (let key in formData) {
         let val = formData[key]
