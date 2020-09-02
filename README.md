@@ -16,4 +16,7 @@
 | $enter(callback) | bind a callback to document enter key down event
 | $toTop(btn, elem) | bind a smooth to top action to element click event
 | $pullToLoad(elem, callback, distance) | callback will be called when element scroll to bottom
+| $base64() | get Base64 tool object
+| $encodeBase64(str) | base64 encode
+| $decodeBase64(base64) | base64 decode
 | $bindVue(vue) | bind all function above to vue prototype
