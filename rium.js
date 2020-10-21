@@ -21,7 +21,7 @@ function $query(name, type = 'string') {
             // no break
         case 'int':
             let number = window.parseInt(value)
-            return isNaN(number) ? 0' : number
+            return isNaN(number) ? 0 : number
         case 'boolean':
             // no break
         case 'bool':
