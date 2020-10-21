@@ -21,7 +21,14 @@ function $query(name, type = 'string') {
             // no break
         case 'int':
             let number = window.parseInt(value)
-            return isNaN(number) ? '' : number
+            return isNaN(number) ? 0' : number
+        case 'boolean':
+            // no break
+        case 'bool':
+            if (value === '0' || value === 'false') {
+                return false
+            }
+            return true
         default:
             return value
     }
